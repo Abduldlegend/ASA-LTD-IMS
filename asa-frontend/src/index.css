@@ -1,0 +1,110 @@
+@import '@fontsource-variable/archivo';
+@import 'tailwindcss';
+
+/*
+ * ASA LTD design tokens.
+ * Brand: Acid Yellow #EFFF00 (emphasis) on Dark Gray #1C1C1C (structure).
+ * Rule: yellow is only ever a fill behind dark content, or an accent on a dark surface.
+ * It is never used as text or thin borders on light surfaces (contrast ~1.1:1).
+ */
+@theme {
+  /* Typography */
+  --font-sans: 'Archivo Variable', ui-sans-serif, system-ui, sans-serif;
+  --text-xs: 0.75rem;
+  --text-sm: 0.8125rem;
+  --text-base: 0.9375rem;
+  --text-lg: 1.0625rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
+
+  /* Brand: acid yellow */
+  --color-brand-50: #fcffcc;
+  --color-brand-100: #f8ff85;
+  --color-brand-400: #efff00;
+  --color-brand-500: #e0ef00;
+  --color-brand-600: #c8d600;
+  --color-brand-700: #9aa300;
+
+  /* Brand: dark gray / ink */
+  --color-ink-950: #141414;
+  --color-ink-900: #1c1c1c;
+  --color-ink-800: #262626;
+  --color-ink-700: #333333;
+  --color-ink-600: #4a4a4a;
+  --color-ink-500: #6b6b6b;
+  --color-ink-400: #8f8f8f;
+  --color-ink-300: #b8b8b8;
+  --color-ink-200: #dcdcd8;
+  --color-ink-100: #ebebe7;
+  --color-ink-50: #f5f5f2;
+
+  /* Semantic status colours (distinct from brand yellow) */
+  --color-success-50: #e8f6ec;
+  --color-success-600: #1f7a3d;
+  --color-danger-50: #fdecec;
+  --color-danger-600: #c62828;
+  --color-warning-50: #fff1e0;
+  --color-warning-600: #b45309;
+  --color-info-50: #e6f0fd;
+  --color-info-600: #1d5fbf;
+
+  /* Surfaces and text (semantic aliases) */
+  --color-canvas: var(--color-ink-50);
+  --color-surface: #ffffff;
+  --color-border: var(--color-ink-200);
+  --color-border-strong: var(--color-ink-300);
+  --color-text: var(--color-ink-900);
+  --color-text-muted: var(--color-ink-500);
+
+  /* Radius: small and consistent */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+
+  /* Shadows: restrained */
+  --shadow-card: 0 1px 2px rgb(28 28 28 / 0.06);
+  --shadow-pop: 0 8px 24px rgb(28 28 28 / 0.14);
+}
+
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    color: var(--color-text);
+    background: var(--color-canvas);
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font-size: var(--text-base);
+    line-height: 1.5;
+  }
+  h1,
+  h2,
+  h3 {
+    font-weight: 650;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-ink-900);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 4px var(--color-brand-400);
+    border-radius: var(--radius-sm);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer utilities {
+  /* Numbers line up in columns: money, quantities, table cells */
+  .num {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum' 1;
+  }
+}
