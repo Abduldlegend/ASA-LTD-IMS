@@ -2,8 +2,15 @@ import type { TextareaHTMLAttributes } from 'react'
 import { cn } from '@/lib/cn'
 import { controlClass } from './controlClass'
 import { Field } from './Field'
+import type { ComponentProps } from 'react'
 
 interface TextareaProps extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'id'> {
+  label: string
+  hint?: string
+  error?: string
+}
+
+interface TextareaProps extends Omit<ComponentProps<'textarea'>, 'id'> {
   label: string
   hint?: string
   error?: string

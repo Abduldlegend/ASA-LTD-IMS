@@ -1,8 +1,9 @@
-import { Bell, ChevronDown, LogOut, Menu, PanelLeftClose, PanelLeftOpen, Plus, Search, UserRound } from 'lucide-react'
+import { Bell, ChevronDown, KeyRound, LogOut, Menu, PanelLeftClose, PanelLeftOpen, Plus, Search, UserRound } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { Button } from '@/components/ui'
 import { findNavItem } from '@/config/navigation'
+import { useAuth } from '@/features/auth/AuthContext'
 import { cn } from '@/lib/cn'
 import { ROLE_LABELS, type User } from '@/types/user'
 
@@ -25,6 +26,7 @@ function IconButton({ className, ...props }: React.ButtonHTMLAttributes<HTMLButt
 }
 
 function UserMenu({ user }: { user: User }) {
+    const { logout } = useAuth()
     const [open, setOpen] = useState(false)
     const ref = useRef<HTMLDivElement>(null)
 
@@ -69,12 +71,31 @@ function UserMenu({ user }: { user: User }) {
                         <p className="text-sm font-medium">{user.name}</p>
                         <p className="text-xs text-text-muted">{ROLE_LABELS[user.role]}</p>
                     </div>
+                    <Link
+                        role="menuitem"
+                        to="/account/password"
+                        onClick={() => setOpen(false)}
+                        className="flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-sm hover:bg-ink-50"
+                        >
+                        <KeyRound className="size-4" aria-hidden /> Change password
+                    </Link>
+                    <button
+                        role="menuitem"
+                        type="button"
+                        onClick={() => {
+                            setOpen(false)
+                            void logout()
+                        }}
+                        className="flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-sm hover:bg-ink-50"
+                    >
+                        <LogOut className="size-4" aria-hidden /> Sign out
+                    </button>
                     <button role="menuitem" type="button" className="flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-sm hover:bg-ink-50">
                         <UserRound className="size-4" aria-hidden /> My profile
                     </button>
-                    <button role="menuitem" type="button" className="flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-sm hover:bg-ink-50">
+                    {/* <button role="menuitem" type="button" className="flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-sm hover:bg-ink-50">
                         <LogOut className="size-4" aria-hidden /> Sign out
-                    </button>
+                    </button> */}
                 </div>
             )}
         </div>
@@ -101,7 +122,7 @@ export function Topbar({ user, collapsed, mobileOpen, onToggleCollapsed, onToggl
             <nav aria-label="Breadcrumb" className="min-w-0 flex-1 sm:flex-none">
                 <p className="truncate text-sm text-text-muted">
                     {current?.group.label && <span className="hidden sm:inline">{current.group.label} / </span>}
-                    <span className="font-semibold text-ink-900">{current?.item.label ?? 'ASA LTD'}</span>
+                    <span className="font-semibold text-ink-900">{current?.item.label ?? (pathname.startsWith('/account') ? 'Account' : 'ASA LTD')}</span>
                 </p>
             </nav>
 

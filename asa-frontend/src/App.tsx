@@ -1,8 +1,12 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
+import { ProtectedRoute } from '@/components/guards/ProtectedRoute'
 import { ALL_NAV_ITEMS } from '@/config/navigation'
-import { AppLayout } from './layouts/AppLayout'
-import { ModulePlaceholderPage } from './pages/ModulePlaceholderPage'
-import { NotFoundPage } from './pages/NotFoundPage'
+import { AppLayout } from '@/layouts/AppLayout'
+import { ChangePasswordPage } from '@/pages/ChangePasswordPage'
+import { DashboardPage } from '@/pages/DashboardPage'
+import { LoginPage } from '@/pages/LoginPage'
+import { ModulePlaceholderPage } from '@/pages/ModulePlaceholderPage'
+import { NotFoundPage } from '@/pages/NotFoundPage'
 import { StyleGuidePage } from '@/pages/StyleGuidePage'
 
 const DESCRIPTIONS: Record<string, string> = {
@@ -27,17 +31,24 @@ const DESCRIPTIONS: Record<string, string> = {
 export default function App() {
   return (
     <Routes>
-      <Route path="/style-guide" element={<StyleGuidePage />} />
-      <Route element={<AppLayout />}>
-        <Route index element={<Navigate to="/dashboard" replace />} />
-        {ALL_NAV_ITEMS.map((item) => (
-          <Route
-            key={item.path}
-            path={`${item.path}/*`}
-            element={<ModulePlaceholderPage title={item.label} description={DESCRIPTIONS[item.path] ?? ''} />}
-          />
-        ))}
-        <Route path="*" element={<NotFoundPage />} />
+      <Route path="/login" element={<LoginPage />} />
+      {import.meta.env.DEV && <Route path="/style-guide" element={<StyleGuidePage />} />}
+
+      {/* Everything below needs a signed-in user. Which pages each role may open is decided in config/navigation.ts. */}
+      <Route element={<ProtectedRoute />}>
+        <Route element={<AppLayout />}>
+          <Route index element={<Navigate to="/dashboard" replace />} />
+          <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/account/password" element={<ChangePasswordPage />} />
+          {ALL_NAV_ITEMS.filter((item) => item.path !== '/dashboard').map((item) => (
+            <Route
+              key={item.path}
+              path={`${item.path}/*`}
+              element={<ModulePlaceholderPage title={item.label} description={DESCRIPTIONS[item.path] ?? ''} />}
+            />
+          ))}
+          <Route path="*" element={<NotFoundPage />} />
+        </Route>
       </Route>
     </Routes>
   )

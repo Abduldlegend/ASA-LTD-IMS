@@ -1,15 +1,14 @@
 import { ChevronDown } from 'lucide-react'
-import type { SelectHTMLAttributes } from 'react'
 import { cn } from '@/lib/cn'
 import { controlClass } from './controlClass'
 import { Field } from './Field'
+import type { ComponentProps } from 'react'
 
 interface Option {
   value: string
   label: string
 }
-
-interface SelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement>, 'id'> {
+interface SelectProps extends Omit<ComponentProps<'select'>, 'id'> {
   label: string
   options: Option[]
   placeholder?: string

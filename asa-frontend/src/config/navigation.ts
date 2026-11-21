@@ -98,4 +98,14 @@ export function findNavItem(pathname: string): { group: NavGroup; item: NavItem 
     return undefined
 }
 
+/**
+ * Whether a role may open a page. Pages inside a navigation item (for example /sales/new)
+ * follow that item's rules. Pages outside the navigation, such as the account pages, are open to everyone signed in.
+ */
+export function canAccessPath(role: Role, pathname: string): boolean {
+    const found = findNavItem(pathname)
+    if (!found?.item.roles) return true
+    return found.item.roles.includes(role)
+}
+
 export const ALL_NAV_ITEMS: NavItem[] = NAV_GROUPS.flatMap((g) => g.items)

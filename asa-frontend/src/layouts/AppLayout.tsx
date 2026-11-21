@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react'
-import { Outlet } from 'react-router-dom'
-import { useCurrentUser } from '../hooks/useCurrentUser'
+import { useLocation } from 'react-router-dom'
+import { ErrorBoundary } from '@/components/guards/ErrorBoundary'
+import { RequireAccess } from '@/components/guards/RequireAccess'
+import { useCurrentUser } from '@/hooks/useCurrentUser'
 import { Sidebar } from './Sidebar'
 import { Topbar } from './Topbar'
 
 export function AppLayout() {
     const user = useCurrentUser()
+    const { pathname } = useLocation()
     const [collapsed, setCollapsed] = useState(false)
     const [mobileOpen, setMobileOpen] = useState(false)
 
@@ -32,7 +35,9 @@ export function AppLayout() {
                     onToggleMobile={() => setMobileOpen((o) => !o)}
                 />
                 <main className="flex-1 px-4 py-6 sm:px-6 lg:px-8">
-                    <Outlet />
+                    <ErrorBoundary resetKey={pathname}>
+                        <RequireAccess />
+                    </ErrorBoundary>
                 </main>
             </div>
         </div>

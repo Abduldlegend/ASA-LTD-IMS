@@ -1,11 +1,9 @@
+import { useAuth } from '@/features/auth/AuthContext'
 import type { User } from '@/types/user'
 
-/**
- * Temporary stand-in until the auth context is built in Stage F1.
- * Change `role` to 'staff' to preview the staff navigation.
- */
-const mockUser: User = { id: 'u1', name: 'Abdulkadir Musa', role: 'admin' }
-
+/** The signed-in user. Only call this inside routes that sit behind <ProtectedRoute>. */
 export function useCurrentUser(): User {
-    return mockUser
+    const { user } = useAuth()
+    if (!user) throw new Error('useCurrentUser was called while nobody is signed in')
+    return user
 }

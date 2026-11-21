@@ -1,12 +1,12 @@
-import type { InputHTMLAttributes } from 'react'
 import { cn } from '@/lib/cn'
 import { controlClass } from './controlClass'
 import { Field } from './Field'
+import type { ComponentProps } from 'react'
 
-interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'id'> {
-  label: string
-  hint?: string
-  error?: string
+interface InputProps extends Omit<ComponentProps<'input'>, 'id'> {
+    label: string
+    hint?: string
+    error?: string
 }
 
 export function Input({ label, hint, error, required, className, ...props }: InputProps) {
