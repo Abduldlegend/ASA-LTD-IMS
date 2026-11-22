@@ -9,6 +9,10 @@ import { ModulePlaceholderPage } from '@/pages/ModulePlaceholderPage'
 import { NotFoundPage } from '@/pages/NotFoundPage'
 import { StyleGuidePage } from '@/pages/StyleGuidePage'
 import { UsersPage } from '@/pages/UsersPage'
+import { CategoriesPage } from '@/pages/CategoriesPage'
+import { ProductsPage } from '@/pages/ProductsPage'
+
+const BUILT = new Set(['/dashboard', '/users', '/products'])
 
 const DESCRIPTIONS: Record<string, string> = {
   '/dashboard': 'Sales, expenses, profit and stock at a glance',
@@ -42,7 +46,9 @@ export default function App() {
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/account/password" element={<ChangePasswordPage />} />
           <Route path="/users" element={<UsersPage />} />
-          {ALL_NAV_ITEMS.filter((item) => item.path !== '/dashboard' && item.path !== '/users').map((item) => (
+          <Route path="/products" element={<ProductsPage />} />
+          <Route path="/products/categories" element={<CategoriesPage />} />
+          {ALL_NAV_ITEMS.filter((item) => !BUILT.has(item.path)).map((item) => (
             <Route
               key={item.path}
               path={`${item.path}/*`}

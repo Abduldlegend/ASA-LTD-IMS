@@ -5,6 +5,9 @@ import { MemoryRouter } from 'react-router-dom'
 import App from '@/App'
 import { AuthProvider } from '@/features/auth/AuthProvider'
 import { DEMO_ACCOUNTS } from '@/mocks/authServer'
+import { Toaster } from 'sonner'
+// ...
+
 
 export const admin = DEMO_ACCOUNTS[0]
 export const staff = DEMO_ACCOUNTS[1]
@@ -20,6 +23,7 @@ export function renderApp(initialPath = '/') {
                     <App />
                 </AuthProvider>
             </MemoryRouter>
+            <Toaster />
         </QueryClientProvider>,
     )
     return { user, ...utils }

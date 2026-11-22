@@ -8,3 +8,11 @@ import type { Role } from '@/types/user'
 export function canViewFinancials(role: Role): boolean {
     return role === 'admin'
 }
+
+/**
+ * Adding and changing products, prices and categories is for management. Staff can see the catalogue,
+ * since they need prices and stock to sell. Again, the API must enforce this too.
+ */
+export function canManageCatalog(role: Role): boolean {
+    return role === 'admin'
+}

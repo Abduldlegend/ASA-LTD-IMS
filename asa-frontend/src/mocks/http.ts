@@ -38,7 +38,7 @@ export function respond<T>(config: InternalAxiosRequestConfig, status: number, b
 }
 
 export const ok = (config: InternalAxiosRequestConfig, data: unknown, status = 200) =>
-    respond(config, status, { success: true, data })
+    respond(config, status, { success: true, data: structuredClone(data) })
 
 export function fail(config: InternalAxiosRequestConfig, status: number, body: Omit<ApiFailure, 'success'>): never {
     const response = respond(config, status, { success: false, ...body })
