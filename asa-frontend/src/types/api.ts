@@ -22,3 +22,13 @@ export interface Paginated<T> {
     pageSize: number
     total: number
 }
+
+/** Query string every list endpoint accepts. See toApiQuery() in lib/listParams.ts. */
+export interface ListQuery {
+    page: number
+    pageSize: number
+    search?: string
+    sortBy?: string
+    sortOrder?: 'asc' | 'desc'
+    [filter: string]: string | number | undefined
+}

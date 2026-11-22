@@ -8,6 +8,7 @@ import { LoginPage } from '@/pages/LoginPage'
 import { ModulePlaceholderPage } from '@/pages/ModulePlaceholderPage'
 import { NotFoundPage } from '@/pages/NotFoundPage'
 import { StyleGuidePage } from '@/pages/StyleGuidePage'
+import { UsersPage } from '@/pages/UsersPage'
 
 const DESCRIPTIONS: Record<string, string> = {
   '/dashboard': 'Sales, expenses, profit and stock at a glance',
@@ -40,7 +41,8 @@ export default function App() {
           <Route index element={<Navigate to="/dashboard" replace />} />
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/account/password" element={<ChangePasswordPage />} />
-          {ALL_NAV_ITEMS.filter((item) => item.path !== '/dashboard').map((item) => (
+          <Route path="/users" element={<UsersPage />} />
+          {ALL_NAV_ITEMS.filter((item) => item.path !== '/dashboard' && item.path !== '/users').map((item) => (
             <Route
               key={item.path}
               path={`${item.path}/*`}

@@ -19,7 +19,7 @@ export const api = axios.create({
     timeout: 15_000,
     // With mocks on, requests are answered by src/mocks/authServer.ts instead of the network.
     // When mocks are off, __USE_MOCKS__ is false at build time and none of that code is in the build.
-    adapter: __USE_MOCKS__ ? (config) => import('../mocks/authServer').then((m) => m.mockAdapter(config)) : undefined,
+    adapter: __USE_MOCKS__ ? (config) => import('../mocks/mockApi').then((m) => m.mockAdapter(config)) : undefined,
 })
 
 // ---------------------------------------------------------------- session expiry
