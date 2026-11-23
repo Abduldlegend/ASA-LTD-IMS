@@ -96,8 +96,8 @@ function seed() {
         const { stock, unit } = item
         const isMaterial = item.group === 'material'
         // Blocks and interlocks are made here; cement is bought and resold; materials are bought and used up.
-        const add: [MovementType, string, string] = isMaterial || item.group === 'cement' ? ['purchase', 'PUR', 'Delivery received'] : ['production', 'PRD', 'Production batch']
-        const take: [MovementType, string, string] = isMaterial ? ['usage', 'PRD', 'Used in production'] : ['sale', 'SAL', 'Sold to customer']
+            const add: [MovementType, string, string] = isMaterial || item.group === 'cement' ? ['purchase', 'PUR', 'Delivery received'] : ['production', 'BAT', 'Production batch']
+            const take: [MovementType, string, string] = isMaterial ? ['usage', 'BAT', 'Used in production'] : ['sale', 'SAL', 'Sold to customer']
 
         let [a, b, c, d] = [0.4, 0.3, 0.35, 0.2].map((f) => round(stock * f, unit))
         let opening = round2(stock - (a - b + c - d))
@@ -132,6 +132,22 @@ function seed() {
 seed()
 onMockReset(seed)
 
+/**
+ * The one place stock changes. Production, purchases, sales and adjustments all come through here, so every
+ * change leaves a movement behind and the balance on each line is the stock at that moment.
+ */
+export function applyStockChange(
+    itemId: string,
+    change: number,
+    fields: Pick<StockMovement, 'type' | 'reference' | 'detail' | 'performedBy'>,
+): StockMovement {
+    const item = allItems().find((i) => i.id === itemId)!
+    const balanceAfter = round2(item.stock + change)
+    setStock(item.id, balanceAfter)
+    const movement = movementOf(item, { ...fields, quantity: change, balanceAfter, createdAt: new Date().toISOString() })
+    movements = [...movements, movement]
+    return movement
+}
 // ---------------------------------------------------------------- handlers
 
 function listItems(config: InternalAxiosRequestConfig) {
@@ -183,19 +199,13 @@ function createAdjustment(config: InternalAxiosRequestConfig) {
     if (Object.keys(errors).length) fail(config, 422, { message: 'Check the highlighted fields.', errors })
 
     const change = (direction === 'in' ? 1 : -1) * (quantity as number)
-    const balanceAfter = round2(item!.stock + change)
-    setStock(item!.id, balanceAfter)
     const label = REASON_LABELS[reason as AdjustmentReason]
-    const movement = movementOf(item!, {
+    const movement = applyStockChange(item!.id, change, {
         type: 'adjustment',
-        quantity: change,
-        balanceAfter,
         reference: null,
         detail: text ? `${label}: ${text}` : label,
         performedBy: me.name,
-        createdAt: new Date().toISOString(),
     })
-    movements = [...movements, movement]
     return ok(config, movement, 201)
 }
 

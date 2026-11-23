@@ -5,9 +5,10 @@ import { usersRoutes } from './users'
 import { catalogRoutes } from './catalog'
 import { procurementRoutes } from './procurement'
 import { inventoryRoutes } from './inventory'
+import { productionRoutes } from './production'
 
 // Add each new module's routes here as it is built.
-const routes: Route[] = [...authRoutes, ...usersRoutes, ...catalogRoutes, ...procurementRoutes, ...inventoryRoutes]
+const routes: Route[] = [...authRoutes, ...usersRoutes, ...catalogRoutes, ...procurementRoutes, ...inventoryRoutes, ...productionRoutes]
 
 /** Plugs into Axios as its adapter, so interceptors, headers and errors behave as they will for real. */
 export async function mockAdapter(config: InternalAxiosRequestConfig): Promise<AxiosResponse> {

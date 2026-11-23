@@ -225,7 +225,7 @@ function setMaterialStatus(config: InternalAxiosRequestConfig, { id }: Record<st
 }
 
 /** For the inventory mock, which reads and changes stock the way the real server's stock service will. */
-export const materialStockRows = () => materials.map((m) => ({ id: m.id, code: m.code, name: m.name, unit: m.unit, stock: m.stock, reorderLevel: m.reorderLevel, active: m.active }))
+export const materialStockRows = () => materials.map((m) => ({ id: m.id, code: m.code, name: m.name, unit: m.unit, unitCost: m.unitCost, stock: m.stock, reorderLevel: m.reorderLevel, active: m.active }))
 export function setMaterialStock(id: string, stock: number) {
     const material = materials.find((m) => m.id === id)
     if (material) material.stock = stock
