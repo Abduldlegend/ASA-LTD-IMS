@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { listColumns } from '@/components/data-table'
-import { ActiveBadge } from '../../components/ui/ActiveBadge'
+import { ActiveBadge } from '@/components/ui'
 import type { Supplier } from './types'
 import { ContactCell, OwedCell, SupplierActions, type SupplierActionHandlers } from './SupplierParts'
 

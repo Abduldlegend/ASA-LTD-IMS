@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { isNigerianPhone } from '@/lib/phone'
 
 const base = {
     name: z.string().trim().min(2, 'Enter the full name'),
@@ -7,7 +8,7 @@ const base = {
     phone: z
         .string()
         .trim()
-        .refine((v) => v === '' || /^(\+?234|0)[789]\d{9}$/.test(v.replace(/[\s-]/g, '')), 'Enter a valid Nigerian phone number'),
+        .refine((v) => v === '' || isNigerianPhone(v), 'Enter a valid Nigerian phone number'),
     role: z.enum(['admin', 'staff'], { error: 'Choose a role' }),
 }
 

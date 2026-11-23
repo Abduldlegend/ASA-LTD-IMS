@@ -16,3 +16,12 @@ export function canViewFinancials(role: Role): boolean {
 export function canManageCatalog(role: Role): boolean {
     return role === 'admin'
 }
+
+/**
+ * Adding and changing suppliers and raw materials, and the costs on them, is for management.
+ * Staff can see both lists, because they receive deliveries and need to know what is in stock,
+ * but they are not sent costs or amounts owed. The API must enforce this too.
+ */
+export function canManageProcurement(role: Role): boolean {
+    return role === 'admin'
+}
