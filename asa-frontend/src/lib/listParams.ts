@@ -25,7 +25,11 @@ export interface ListSchema {
     /** Columns that may be sorted, so a hand-edited address cannot ask for anything else. */
     sortable?: string[]
     /** Filter names this screen understands, each with the values it accepts. Others are dropped. */
-    filters?: Record<string, readonly string[]>
+    /**
+   * Filter names this screen understands, each with the values it accepts: a fixed list, or a pattern
+   * for values that cannot be listed in advance (such as an item id). Others are dropped.
+   */
+    filters?: Record<string, readonly string[] | RegExp>
     defaultSort?: SortState
     defaultPageSize?: number
 }
@@ -46,7 +50,7 @@ export function parseListParams(query: URLSearchParams, schema: ListSchema = {})
     const filters: Record<string, string> = {}
     for (const [name, allowed] of Object.entries(schema.filters ?? {})) {
         const value = query.get(name)
-        if (value && allowed.includes(value)) filters[name] = value
+            if (value && (allowed instanceof RegExp ? allowed.test(value) : allowed.includes(value))) filters[name] = value
     }
 
     return {

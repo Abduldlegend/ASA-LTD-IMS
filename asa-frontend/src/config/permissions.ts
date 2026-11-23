@@ -25,3 +25,11 @@ export function canManageCatalog(role: Role): boolean {
 export function canManageProcurement(role: Role): boolean {
     return role === 'admin'
 }
+
+/**
+ * Correcting stock by hand (a recount, damaged goods) changes what the business believes it owns,
+ * so it is for management. Staff can see stock and the movement history. The API must enforce this too.
+ */
+export function canAdjustStock(role: Role): boolean {
+    return role === 'admin'
+}

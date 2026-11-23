@@ -255,6 +255,14 @@ function setProductStatus(config: InternalAxiosRequestConfig, { id }: Record<str
     return ok(config, withCategory(product))
 }
 
+/** For the inventory mock, which reads and changes stock the way the real server's stock service will. */
+export const productStockRows = () =>
+    products.map((p) => ({ id: p.id, code: p.code, name: p.name, kind: p.kind, stock: p.stock, reorderLevel: p.reorderLevel, piecesPerSquareMetre: p.piecesPerSquareMetre, active: p.active }))
+export function setProductStock(id: string, stock: number) {
+    const product = products.find((p) => p.id === id)
+    if (product) product.stock = stock
+}
+
 export const catalogRoutes: Route[] = [
     ['GET /categories', listCategories],
     ['POST /categories', createCategory],
