@@ -33,3 +33,11 @@ export function canManageProcurement(role: Role): boolean {
 export function canAdjustStock(role: Role): boolean {
     return role === 'admin'
 }
+
+/**
+ * Staff add and edit customers, because they often have to do it in the middle of a sale. Switching a
+ * customer off, and seeing what customers owe, is for management. The API must enforce this too.
+ */
+export function canDeactivateCustomers(role: Role): boolean {
+    return role === 'admin'
+}

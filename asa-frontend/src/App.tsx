@@ -16,8 +16,9 @@ import { SuppliersPage } from '@/pages/SuppliersPage'
 import { InventoryPage } from '@/pages/InventoryPage'
 import { MovementsPage } from '@/pages/MovementsPage'
 import { ProductionPage } from '@/pages/ProductionPage'
+import { CustomersPage } from '@/pages/CustomersPage'
 
-const BUILT = new Set(['/dashboard', '/users', '/products', '/raw-materials', '/suppliers', '/inventory', '/production'])
+const BUILT = new Set(['/dashboard', '/users', '/products', '/raw-materials', '/suppliers', '/inventory', '/production', '/customers'])
 
 const DESCRIPTIONS: Record<string, string> = {
   '/dashboard': 'Sales, expenses, profit and stock at a glance',
@@ -58,6 +59,7 @@ export default function App() {
           <Route path="/inventory" element={<InventoryPage />} />
           <Route path="/inventory/movements" element={<MovementsPage />} />
           <Route path="/production" element={<ProductionPage />} />
+          <Route path="/customers" element={<CustomersPage />} />
           {ALL_NAV_ITEMS.filter((item) => !BUILT.has(item.path)).map((item) => (
             <Route
               key={item.path}
