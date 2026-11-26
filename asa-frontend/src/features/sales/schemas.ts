@@ -68,7 +68,7 @@ export const saleFormSchema = (catalog: SaleCatalog) =>
                 // if (pieces === null) return issue(['lines', i, 'productId'], 'This design has no pieces-per-m² rate yet, so it cannot be sold')
                 // if (pieces > product.stock) issue(at, product.stock === 0 ? 'Out of stock' : `Only ${describeStock(product, product.stock)} in stock`)
 
-                const problem = lineProblem(product, row.quantity, true)
+            const problem = lineProblem(product, row.quantity, true)
                 if (problem) issue(['lines', i, problem.field], problem.message)
             })
             if (!linesOk) return

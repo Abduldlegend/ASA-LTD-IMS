@@ -15,8 +15,16 @@ import type { Sale, SaleInput } from './types'
 
 const FIELDS = ['customerId', 'soldOn', 'lines', 'amountPaid', 'method', 'note'] as const
 
+interface NewSaleModalProps {
+    onClose: () => void
+    /** Starts the form from something already agreed, such as a customer order. The customer is then fixed. */
+    prefill?: { title: string; customerId: string; customerName: string; lines: { productId: string; quantity: number }[] }
+    /** Sends the sale somewhere other than plain "record a sale", for example to fulfil an order. */
+    submit?: (input: SaleInput) => Promise<Sale>
+}
+
 /** Records a sale at the till: who bought, what, and how much they paid now. The pieces leave stock straight away. */
-export function NewSaleModal({ onClose }: { onClose: () => void }) {
+export function NewSaleModal({ onClose, prefill, submit }: NewSaleModalProps) {
     const formId = useId()
     const [formError, setFormError] = useState<string | null>(null)
     const [confirmDiscard, setConfirmDiscard] = useState(false)
@@ -37,7 +45,14 @@ export function NewSaleModal({ onClose }: { onClose: () => void }) {
         formState: { errors, isDirty, isSubmitting },
     } = useForm<SaleFormValues>({
         resolver: zodResolver(schema),
-        defaultValues: { customerId: '', soldOn: todayISO(), lines: [{ productId: '', quantity: '' }], amountPaid: '', method: 'cash', note: '' },
+        defaultValues: {
+            customerId: prefill?.customerId ?? '',
+            soldOn: todayISO(),
+            lines: prefill?.lines.map((l) => ({ productId: l.productId, quantity: String(l.quantity) })) ?? [{ productId: '', quantity: '' }],
+            amountPaid: '',
+            method: 'cash',
+            note: '',
+        },
     })
     const { fields, append, remove } = useFieldArray({ control, name: 'lines' })
     const [customerId, rows, amountPaid] = useWatch({ control, name: ['customerId', 'lines', 'amountPaid'] })
@@ -56,7 +71,7 @@ export function NewSaleModal({ onClose }: { onClose: () => void }) {
     const onSubmit = handleSubmit(async (values) => {
         setFormError(null)
         try {
-            const sale = await create.mutateAsync(toSaleInput(values))
+            const sale = await (submit ?? create.mutateAsync)(toSaleInput(values))
             toast.success(`${sale.code} recorded for ${formatNaira(sale.total)}`)
             onClose()
         } catch (e) {
@@ -70,7 +85,7 @@ export function NewSaleModal({ onClose }: { onClose: () => void }) {
             onClose={requestClose}
             closeOnBackdrop={!isDirty}
             size="lg"
-            title="New sale"
+            title={prefill?.title ?? 'New sale'}
             description="The pieces leave stock as soon as the sale is recorded."
             footer={
                 confirmDiscard ? (
@@ -103,7 +118,7 @@ export function NewSaleModal({ onClose }: { onClose: () => void }) {
                     </div>
                 )}
 
-                <div className="grid gap-4 sm:grid-cols-2">
+                {/* <div className="grid gap-4 sm:grid-cols-2">
                     <Select
                         label="Customer"
                         options={[{ value: '', label: 'Walk-in customer' }, ...(customers.data?.items ?? []).map((c) => ({ value: c.id, label: `${c.name} (${c.code})` }))]}
@@ -112,7 +127,22 @@ export function NewSaleModal({ onClose }: { onClose: () => void }) {
                         {...register('customerId')}
                     />
                     <Input label="Date of sale" required type="date" max={todayISO()} error={errors.soldOn?.message} {...register('soldOn')} />
-                </div>
+                </div> */}
+
+                {prefill ? (
+                    <div>
+                        <p className="text-sm font-medium text-ink-900">Customer</p>
+                        <p className="mt-1.5 flex h-10 items-center text-sm">{prefill.customerName}</p>
+                    </div>
+                ) : (
+                    <Select
+                        label="Customer"
+                        options={[{ value: '', label: 'Walk-in customer' }, ...(customers.data?.items ?? []).map((c) => ({ value: c.id, label: `${c.name} (${c.code})` }))]}
+                        hint="Choose a customer to sell on credit. A walk-in customer pays in full."
+                        error={errors.customerId?.message}
+                        {...register('customerId')}
+                    />
+                )}
 
                 <fieldset className="space-y-3">
                     <legend className="text-sm font-medium text-ink-900">Items</legend>
@@ -125,6 +155,7 @@ export function NewSaleModal({ onClose }: { onClose: () => void }) {
                         return (
                             <div key={field.id} className="grid gap-3 sm:grid-cols-[1fr_9rem_auto] sm:items-start">
                                 <Select
+                                    key={productItems.length}
                                     label={`Product ${i + 1}`}
                                     required
                                     placeholder={products.isPending ? 'Loading products' : 'Choose a product'}

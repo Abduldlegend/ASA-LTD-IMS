@@ -141,9 +141,11 @@ function summary(config: InternalAxiosRequestConfig) {
 
 const validMethod = (v: unknown): v is PaymentMethod => METHODS.includes(v as PaymentMethod)
 
-function createSale(config: InternalAxiosRequestConfig) {
-    const me = requireUser(config)
-    const { soldOn, customerId, lines, payment, note } = bodyOf(config)
+type Me = ReturnType<typeof requireUser>
+
+export function makeSale(config: InternalAxiosRequestConfig, me: Me, body: Record<string, unknown> = bodyOf(config)): Sale {
+    const { soldOn, customerId, lines, payment, note } = body
+    // ... the rest of the old createSale body is unchanged, except it now ends with:
     const errors: Record<string, string> = {}
 
     if (!isDate(soldOn)) errors.soldOn = 'Choose the date'
@@ -196,8 +198,10 @@ function createSale(config: InternalAxiosRequestConfig) {
     sale.createdAt = new Date().toISOString()
     if (sale.customerId && sale.balance > 0) addToCustomerOwed(sale.customerId, sale.balance)
     sales = [...sales, sale]
-    return ok(config, sale, 201)
+    return sale
 }
+
+const createSale = (config: InternalAxiosRequestConfig) => ok(config, makeSale(config, requireUser(config)), 201)
 
 function addPayment(config: InternalAxiosRequestConfig, { id }: Record<string, string>) {
     const me = requireUser(config)
