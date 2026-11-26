@@ -50,4 +50,4 @@ export const unitWord = (unit: SaleUnit) => (unit === 'm2' ? 'm²' : unit === 'b
 export const perUnit = (unit: SaleUnit) => (unit === 'm2' ? 'per m²' : unit === 'bags' ? 'per bag' : 'per piece')
 
 /** "20 bags Dangote 3X cement 50kg". */
-export const describeLine = (line: SaleLine) => `${line.quantity.toLocaleString('en-NG')} ${unitWord(line.unit)} ${line.productName}`
+export const describeLine = (line: Pick<SaleLine, 'quantity' | 'unit' | 'productName'>) => `${line.quantity.toLocaleString('en-NG')} ${unitWord(line.unit)} ${line.productName}`

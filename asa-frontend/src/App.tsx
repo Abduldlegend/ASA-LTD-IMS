@@ -44,7 +44,6 @@ export default function App() {
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
-      <Route path="/sales" element={<SalesPage />} />
       {import.meta.env.DEV && <Route path="/style-guide" element={<StyleGuidePage />} />}
 
       {/* Everything below needs a signed-in user. Which pages each role may open is decided in config/navigation.ts. */}
@@ -62,6 +61,7 @@ export default function App() {
           <Route path="/inventory/movements" element={<MovementsPage />} />
           <Route path="/production" element={<ProductionPage />} />
           <Route path="/customers" element={<CustomersPage />} />
+          <Route path="/sales" element={<SalesPage />} />
           {ALL_NAV_ITEMS.filter((item) => !BUILT.has(item.path)).map((item) => (
             <Route
               key={item.path}

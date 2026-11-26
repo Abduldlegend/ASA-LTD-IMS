@@ -11,6 +11,7 @@ import { parseDecimal } from '@/lib/parseNumber'
 import { saleFormSchema, toSaleInput, type SaleFormValues } from './schemas'
 import { describeStock, lineAmount, METHOD_LABELS, METHODS, perUnit, piecesFor, saleTotal, toCatalog, UNIT_BY_KIND, unitWord } from './units'
 import { useCreateSale, useSaleCustomers, useSaleProducts } from './useSales'
+import type { Sale, SaleInput } from './types'
 
 const FIELDS = ['customerId', 'soldOn', 'lines', 'amountPaid', 'method', 'note'] as const
 

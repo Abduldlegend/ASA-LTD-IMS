@@ -1,6 +1,6 @@
 import type { Tone } from './Badge'
 
-export type StatusGroup = 'production' | 'payment' | 'approval' | 'delivery' | 'stock' | 'sale'
+export type StatusGroup = 'production' | 'payment' | 'approval' | 'delivery' | 'stock' | 'sale' | 'order'
 
 export const STATUS_MAP: Record<StatusGroup, Record<string, { label: string; tone: Tone }>> = {
   production: {
@@ -33,6 +33,11 @@ export const STATUS_MAP: Record<StatusGroup, Record<string, { label: string; ton
   },
     sale: {
     completed: { label: 'Completed', tone: 'success' },
+    cancelled: { label: 'Cancelled', tone: 'neutral' },
+  },
+    order: {
+    pending: { label: 'Open', tone: 'info' },
+    fulfilled: { label: 'Fulfilled', tone: 'success' },
     cancelled: { label: 'Cancelled', tone: 'neutral' },
   },
 }
