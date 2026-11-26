@@ -41,3 +41,12 @@ export function canAdjustStock(role: Role): boolean {
 export function canDeactivateCustomers(role: Role): boolean {
     return role === 'admin'
 }
+
+/**
+ * Anyone can record a sale and take a later payment, because that is the till. Cancelling one puts stock back
+ * and rewrites what a customer owes, so it is for management, and so are the totals across all sales.
+ * Staff do see the amounts on a sale they can open, since they quote them to the customer. The API must enforce this too.
+ */
+export function canCancelSales(role: Role): boolean {
+    return role === 'admin'
+}

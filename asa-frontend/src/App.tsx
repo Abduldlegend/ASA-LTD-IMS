@@ -17,8 +17,9 @@ import { InventoryPage } from '@/pages/InventoryPage'
 import { MovementsPage } from '@/pages/MovementsPage'
 import { ProductionPage } from '@/pages/ProductionPage'
 import { CustomersPage } from '@/pages/CustomersPage'
+import { SalesPage } from '@/pages/SalesPage'
 
-const BUILT = new Set(['/dashboard', '/users', '/products', '/raw-materials', '/suppliers', '/inventory', '/production', '/customers'])
+const BUILT = new Set(['/dashboard', '/users', '/products', '/raw-materials', '/suppliers', '/inventory', '/production', '/customers', '/sales'])
 
 const DESCRIPTIONS: Record<string, string> = {
   '/dashboard': 'Sales, expenses, profit and stock at a glance',
@@ -43,6 +44,7 @@ export default function App() {
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/sales" element={<SalesPage />} />
       {import.meta.env.DEV && <Route path="/style-guide" element={<StyleGuidePage />} />}
 
       {/* Everything below needs a signed-in user. Which pages each role may open is decided in config/navigation.ts. */}

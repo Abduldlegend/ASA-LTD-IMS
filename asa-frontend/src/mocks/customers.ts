@@ -155,6 +155,13 @@ function setCustomerStatus(config: InternalAxiosRequestConfig, { id }: Record<st
     return ok(config, show(customer, true))
 }
 
+/** For the sales mock: who a sale can be made to, and keeping what they owe in step with sales and payments. */
+export const customerForSale = (id: string) => customers.find((c) => c.id === id)
+export function addToCustomerOwed(id: string, change: number) {
+    const customer = customers.find((c) => c.id === id)
+  if (customer) customer.owed = Math.max(0, Math.round((customer.owed + change) * 100) / 100)
+}
+
 export const customersRoutes: Route[] = [
     ['GET /customers', listCustomers],
     ['POST /customers', createCustomer],
