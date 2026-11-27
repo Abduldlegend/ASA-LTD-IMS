@@ -231,6 +231,16 @@ export function setMaterialStock(id: string, stock: number) {
     if (material) material.stock = stock
 }
 
+export const supplierForPurchase = (id: string) => suppliers.find((s) => s.id === id)
+export function addToSupplierOwed(id: string, change: number) {
+    const supplier = suppliers.find((s) => s.id === id)
+    if (supplier) supplier.owed = Math.max(0, Math.round((supplier.owed + change) * 100) / 100)
+}
+export function setMaterialUnitCost(id: string, cost: number) {
+    const material = materials.find((m) => m.id === id)
+    if (material) material.unitCost = cost
+}
+
 export const procurementRoutes: Route[] = [
     ['GET /suppliers', listSuppliers],
     ['POST /suppliers', createSupplier],

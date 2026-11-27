@@ -9,12 +9,13 @@ import { productionRoutes } from './production'
 import { customersRoutes } from './customers'
 import { salesRoutes } from './sales'
 import { ordersRoutes } from './orders'
+import { purchasesRoutes } from './purchases'
 
 // Add each new module's routes here as it is built.
-const routes: Route[] = [...authRoutes, ...usersRoutes, ...catalogRoutes, ...procurementRoutes, ...inventoryRoutes, ...productionRoutes, ...customersRoutes, ...salesRoutes, ...ordersRoutes]
+const routes: Route[] = [...authRoutes, ...usersRoutes, ...catalogRoutes, ...procurementRoutes, ...inventoryRoutes, ...productionRoutes, ...customersRoutes, ...salesRoutes, ...ordersRoutes, ...purchasesRoutes]
 
 /** Plugs into Axios as its adapter, so interceptors, headers and errors behave as they will for real. */
-export async function mockAdapter(config: InternalAxiosRequestConfig): Promise<AxiosResponse> {
+export async function mockAdapter(config: InternalAxiosRequestConfig): Promise<AxiosResponse> { 
     if (network.delayMs > 0) await new Promise((resolve) => setTimeout(resolve, network.delayMs))
 
     const method = (config.method ?? 'get').toUpperCase()

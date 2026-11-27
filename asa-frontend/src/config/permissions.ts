@@ -50,3 +50,8 @@ export function canDeactivateCustomers(role: Role): boolean {
 export function canCancelSales(role: Role): boolean {
     return role === 'admin'
 }
+
+/** Management price, approve, reject and pay for purchases. Staff only record what arrived. My assumption. */
+export function canApprovePurchases(role: Role): boolean {
+    return role === 'admin'
+}

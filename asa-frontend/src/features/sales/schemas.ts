@@ -19,7 +19,7 @@ export function lineProblem(product: SaleProduct, text: string, checkStock: bool
     return null
 }
 
-const money = (message: string) =>
+export const money = (message: string) =>
     z
         .string()
         .trim()
